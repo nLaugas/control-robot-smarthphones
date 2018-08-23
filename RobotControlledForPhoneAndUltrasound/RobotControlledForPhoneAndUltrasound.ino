@@ -41,8 +41,16 @@
 #define GND_ESP8266  7
 
 
+int overflowAngle(int rawAngle, int max, int min){
+    if (rawAngle > max)
+        return max;
+    if (rawAngle <= min)
+        return min;
+    return rawAngle; 
+}
+
 int anglePitchPhone, angleRollPhone, state = 0,
-    speed, powerMotorLeft, powerMotorRight;
+    speed, powerMotorLeft, powerMotorRight, angle;
 
 
 HardwareSerial &ESP8266  = Serial1;
@@ -106,7 +114,8 @@ std::vector<void (*)()>  stateMachine = {
       DEBUG("DETENIDO");
       DEBUG(speed);
     }
-    speed = map(anglePitchPhone,HALF_PITCH - PITCH_OFFSET_NULL,MIN_PITCH,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
+    angle = overflowAngle(anglePitchPhone,MIN_PITCH,MAX_PITCH);
+    speed = map(angle,HALF_PITCH - PITCH_OFFSET_NULL,MIN_PITCH,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
     digitalWrite(MOTOR_RIGHT_REARWARD,LOW);
     digitalWrite(MOTOR_LEFT_REARWARD, HIGH);
     digitalWrite(MOTOR_LEFT_FORWARD , LOW);
@@ -119,7 +128,8 @@ std::vector<void (*)()>  stateMachine = {
       DEBUG("DETENIDO");
       DEBUG(speed);
     } 
-    speed = map(anglePitchPhone,HALF_PITCH + PITCH_OFFSET_NULL,MAX_PITCH,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
+    angle = overflowAngle(anglePitchPhone,MIN_PITCH,MAX_PITCH);
+    speed = map(angle,HALF_PITCH + PITCH_OFFSET_NULL,MAX_PITCH,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
     digitalWrite(MOTOR_RIGHT_REARWARD,HIGH);
     digitalWrite(MOTOR_LEFT_REARWARD, LOW);
     digitalWrite(MOTOR_LEFT_FORWARD , HIGH);
@@ -134,7 +144,8 @@ std::vector<void (*)()>  stateMachine = {
       DEBUG("DETENIDO");
       DEBUG(speed);
     } 
-    speed = map(angleRollPhone,HALF_ROLL + ROLL_OFFSET_NULL,MAX_ROLL,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
+    angle = overflowAngle(angleRollPhone,MIN_ROLL,MAX_ROLL);
+    speed = map(angle,HALF_ROLL + ROLL_OFFSET_NULL,MAX_ROLL,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
     digitalWrite(MOTOR_RIGHT_REARWARD,HIGH);
     digitalWrite(MOTOR_LEFT_REARWARD, HIGH);
     digitalWrite(MOTOR_LEFT_FORWARD , LOW);
@@ -148,7 +159,8 @@ std::vector<void (*)()>  stateMachine = {
       DEBUG("DETENIDO");
       DEBUG(speed);
     } 
-    speed = map(angleRollPhone,HALF_ROLL - ROLL_OFFSET_NULL,MIN_ROLL,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
+    angle = overflowAngle(angleRollPhone,MIN_ROLL,MAX_ROLL);
+    speed = map(angle,HALF_ROLL - ROLL_OFFSET_NULL,MIN_ROLL,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
     digitalWrite(MOTOR_RIGHT_REARWARD,LOW);
     digitalWrite(MOTOR_LEFT_REARWARD, LOW);
     digitalWrite(MOTOR_LEFT_FORWARD , HIGH);
