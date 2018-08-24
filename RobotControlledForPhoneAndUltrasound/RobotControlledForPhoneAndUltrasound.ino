@@ -41,7 +41,7 @@
 #define GND_ESP8266  7
 
 
-int overflowAngle(int rawAngle, int max, int min){
+int overflowAngle(int rawAngle, int min, int max){
     if (rawAngle > max)
         return max;
     if (rawAngle <= min)
@@ -87,19 +87,19 @@ std::vector<void (*)()>  stateMachine = {
   []() { 
     if ( (anglePitchPhone < HALF_PITCH - PITCH_OFFSET_NULL) && (enableForward())){
       state = 1;
-      DEBUG("AVANZAR");
+      //DEBUG("AVANZAR");
     }
     else if ((anglePitchPhone > HALF_PITCH + PITCH_OFFSET_NULL)&& (enableRearward())){
       state = 2;  
-      DEBUG("RETROCEDER");
+      //DEBUG("RETROCEDER");
     }
     else if ((angleRollPhone > HALF_ROLL + ROLL_OFFSET_NULL)&& (enableRearward())){
       state = 3;
-      DEBUG("DERECHA");
+      //DEBUG("DERECHA");
     }
     else if ((angleRollPhone < HALF_ROLL - ROLL_OFFSET_NULL) && (enableRearward())){
       state = 4;
-      DEBUG("IZQUIERDA");
+      //DEBUG("IZQUIERDA");
     }
     speed = 0;
     digitalWrite(MOTOR_RIGHT_REARWARD,LOW);
@@ -112,7 +112,7 @@ std::vector<void (*)()>  stateMachine = {
     if ((anglePitchPhone > HALF_PITCH - PITCH_OFFSET_NULL  ) || (!enableForward())){ 
       state = 0;
       DEBUG("DETENIDO");
-      DEBUG(speed);
+      //DEBUG(speed);
     }
     angle = overflowAngle(anglePitchPhone,MIN_PITCH,MAX_PITCH);
     speed = map(angle,HALF_PITCH - PITCH_OFFSET_NULL,MIN_PITCH,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
@@ -125,8 +125,8 @@ std::vector<void (*)()>  stateMachine = {
   []() { 
     if ((anglePitchPhone < HALF_PITCH + PITCH_OFFSET_NULL) || (!enableRearward())){
       state = 0;
-      DEBUG("DETENIDO");
-      DEBUG(speed);
+      //DEBUG("DETENIDO");
+      //DEBUG(speed);
     } 
     angle = overflowAngle(anglePitchPhone,MIN_PITCH,MAX_PITCH);
     speed = map(angle,HALF_PITCH + PITCH_OFFSET_NULL,MAX_PITCH,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
@@ -141,8 +141,8 @@ std::vector<void (*)()>  stateMachine = {
   []() { 
     if ((angleRollPhone < HALF_ROLL + ROLL_OFFSET_NULL) || (!enableForward())){
       state = 0;
-      DEBUG("DETENIDO");
-      DEBUG(speed);
+      //DEBUG("DETENIDO");
+      //DEBUG(speed);
     } 
     angle = overflowAngle(angleRollPhone,MIN_ROLL,MAX_ROLL);
     speed = map(angle,HALF_ROLL + ROLL_OFFSET_NULL,MAX_ROLL,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
@@ -156,8 +156,8 @@ std::vector<void (*)()>  stateMachine = {
   []() { 
     if ((angleRollPhone > HALF_ROLL - ROLL_OFFSET_NULL) || (!enableForward())){
       state = 0;
-      DEBUG("DETENIDO");
-      DEBUG(speed);
+      //DEBUG("DETENIDO");
+      //DEBUG(speed);
     } 
     angle = overflowAngle(angleRollPhone,MIN_ROLL,MAX_ROLL);
     speed = map(angle,HALF_ROLL - ROLL_OFFSET_NULL,MIN_ROLL,MIN_POWER_MOTOR,MAX_POWER_MOTOR);
